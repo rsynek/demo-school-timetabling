@@ -17,6 +17,7 @@
 package org.acme.schooltimetabling.solver;
 
 import org.acme.schooltimetabling.domain.Lesson;
+import org.acme.schooltimetabling.domain.Room;
 import org.acme.schooltimetabling.domain.TimeTable;
 import org.acme.schooltimetabling.domain.Timeslot;
 import org.optaplanner.core.api.score.director.ScoreDirector;
@@ -42,13 +43,23 @@ public class SwapLessonsByTeacherMove extends AbstractMove<TimeTable> {
         Timeslot leftTimeslot = leftLesson.getTimeslot();
         setLessonTimeslot(scoreDirector, leftLesson, rightLesson.getTimeslot());
         setLessonTimeslot(scoreDirector, rightLesson, leftTimeslot);
+        Room leftRoom = leftLesson.getRoom();
+        setLessonRoom(scoreDirector, leftLesson, rightLesson.getRoom());
+        setLessonRoom(scoreDirector, rightLesson, leftRoom);
     }
 
     private void setLessonTimeslot(ScoreDirector<TimeTable> scoreDirector, Lesson lesson, Timeslot timeslot) {
         final String propertyName = "timeslot";
-        scoreDirector.beforeVariableChanged(lesson, propertyName);
+      //  scoreDirector.beforeVariableChanged(lesson, propertyName);
         lesson.setTimeslot(timeslot);
-        scoreDirector.afterVariableChanged(lesson, propertyName);
+      //  scoreDirector.afterVariableChanged(lesson, propertyName);
+    }
+
+    private void setLessonRoom(ScoreDirector<TimeTable> scoreDirector, Lesson lesson, Room room) {
+        final String propertyName = "room";
+      //  scoreDirector.beforeVariableChanged(lesson, propertyName);
+        lesson.setRoom(room);
+      //  scoreDirector.afterVariableChanged(lesson, propertyName);
     }
 
     @Override

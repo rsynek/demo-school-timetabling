@@ -79,7 +79,7 @@ class TimeTableConstraintProviderTest {
         Lesson thirdTuesdayLessonWithGap = new Lesson(4, "Subject4", teacher, "Group4", TIMESLOT4, ROOM1);
         constraintVerifier.verifyThat(TimeTableConstraintProvider::teacherTimeEfficiency)
                 .given(singleLessonOnMonday, firstTuesdayLesson, secondTuesdayLesson, thirdTuesdayLessonWithGap)
-                .rewardsWith(1); // Second tuesday lesson immediately follows the first.
+                .penalizesBy(1); // Second tuesday lesson immediately follows the first.
     }
 
     @Test

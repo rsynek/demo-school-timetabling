@@ -78,9 +78,18 @@ public class TimeTableConstraintProvider implements ConstraintProvider {
                 .filter((lesson1, lesson2) -> {
                     Duration between = Duration.between(lesson1.getTimeslot().getEndTime(),
                             lesson2.getTimeslot().getStartTime());
-                    return !between.isNegative() && between.compareTo(Duration.ofMinutes(30)) <= 0;
+                    return !between.isNegative() && between.compareTo(Duration.ofMinutes(30)) >= 0;
                 })
-                .reward(HardSoftScore.ONE_SOFT)
+                .ifNotExists(Lesson.class, Joiners.filtering((lesson1, lesson2, lesson3) -> {
+                    boolean theSameTeacher = lesson1.getTeacher() == lesson3.getTeacher()
+                            && lesson2.getTeacher() == lesson3.getTeacher();
+                    boolean isBetweenLesson1AndLesson2 =
+                            lesson3.getTimeslot().getStartTime().isAfter(lesson1.getTimeslot().getEndTime())
+                            && lesson3.getTimeslot().getEndTime().isBefore(lesson2.getTimeslot().getStartTime())
+                            && lesson3.getTimeslot().getDayOfWeek() == lesson1.getTimeslot().getDayOfWeek();
+                    return theSameTeacher && isBetweenLesson1AndLesson2;
+                }))
+                .penalize(HardSoftScore.ONE_SOFT)
                 .asConstraint("Teacher time efficiency");
     }
 
