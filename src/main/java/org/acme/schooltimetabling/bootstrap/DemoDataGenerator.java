@@ -1,10 +1,18 @@
 package org.acme.schooltimetabling.bootstrap;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import org.acme.schooltimetabling.domain.Lesson;
+import org.acme.schooltimetabling.domain.Room;
+import org.acme.schooltimetabling.domain.Timeslot;
 import org.acme.schooltimetabling.persistence.LessonRepository;
 import org.acme.schooltimetabling.persistence.RoomRepository;
 import org.acme.schooltimetabling.persistence.TimeslotRepository;
@@ -23,7 +31,6 @@ public class DemoDataGenerator {
 
     @Transactional
     public void generateDemoData(@Observes StartupEvent startupEvent) {
-/*
         List<Timeslot> timeslotList = new ArrayList<>(10);
         timeslotList.add(new Timeslot(DayOfWeek.MONDAY, LocalTime.of(8, 30), LocalTime.of(9, 30)));
         timeslotList.add(new Timeslot(DayOfWeek.MONDAY, LocalTime.of(9, 30), LocalTime.of(10, 30)));
@@ -73,7 +80,6 @@ public class DemoDataGenerator {
         lesson.setRoom(roomList.get(0));
 
         lessonRepository.persist(lessonList);
- */
     }
 
 }
