@@ -7,6 +7,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
 import org.acme.schooltimetabling.domain.TimeTable;
+import org.acme.schooltimetabling.domain.Lesson;
 import org.acme.schooltimetabling.persistence.LessonRepository;
 import org.acme.schooltimetabling.persistence.RoomRepository;
 import org.acme.schooltimetabling.persistence.TimeslotRepository;
@@ -14,6 +15,8 @@ import org.optaplanner.core.api.score.ScoreManager;
 import org.optaplanner.core.api.score.buildin.hardsoft.HardSoftScore;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.api.solver.SolverStatus;
+
+import io.quarkus.panache.common.Sort;
 
 @Path("timeTable")
 public class TimeTableResource {
@@ -69,21 +72,19 @@ public class TimeTableResource {
         }
         // Occurs in a single transaction, so each initialized lesson references the same timeslot/room instance
         // that is contained by the timeTable's timeslotList/roomList.
-        return new TimeTable(/*
-                timeslotRepository.listAll(Sort.by("dayOfWeek").and("startTime").and("endTime").and("id")),
+        return new TimeTable(
                 roomRepository.listAll(Sort.by("name").and("id")),
-                lessonRepository.listAll(Sort.by("subject").and("teacher").and("studentGroup").and("id"))*/);
+                timeslotRepository.listAll(Sort.by("dayOfWeek").and("startTime").and("endTime").and("id")),
+                lessonRepository.listAll(Sort.by("subject").and("teacher").and("studentGroup").and("id")));
     }
 
     @Transactional
     protected void save(TimeTable timeTable) {
-        /*
         for (Lesson lesson : timeTable.getLessonList()) {
             Lesson attachedLesson = lessonRepository.findById(lesson.getId());
             attachedLesson.setTimeslot(lesson.getTimeslot());
             attachedLesson.setRoom(lesson.getRoom());
         }
-         */
     }
 
 }
